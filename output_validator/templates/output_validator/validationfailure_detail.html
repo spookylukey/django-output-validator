@@ -1,0 +1,35 @@
+{% extends "output_validator/base.html" %}
+{% block content %}
+<a href="../">[up]</a>
+<h2>Validation failure details</h2>
+
+<form method="post" action="delete/">{% csrf_token %}<div>
+<input type="submit" name="delete" value="Delete" />
+</div>
+</form>
+
+<table width="100%">
+	<tr>
+		<th scope="row">Time</th>
+		<td>{{ object.timestamp|date:"d M y h:i" }}</td>
+	</tr>
+	<tr>
+		<th scope="row">Request</th>
+		<td>{{ object.method }} {{ object.path }}
+		{% if object.method == 'GET' %}<a href="{{ object.path|escape }}">[go]</a>{% endif %}
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Errors</th>
+		<td><div><pre>{{ object.errors }}</pre></div></td>
+	</tr>
+	<tr>
+		<th scope="row">Response content</th>
+		<td><div><pre>{{ object.get_response.content|linenumbers }}</pre></div></td>
+	</tr>
+	<tr>
+		<th scope="row">Original request</th>
+		<td><div class="python">{{ object.get_request_formatted }}</div></td>
+	</tr>
+</table>
+{% endblock %}
