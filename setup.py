@@ -10,7 +10,7 @@ def read(*rnames):
 setup(
     name = "django-output-validator",
     version = '1.5',
-    packages = ['output_validator'],
+    packages = find_packages(),
     include_package_data = True,
 
     author = "Luke Plant",
