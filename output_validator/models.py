@@ -20,13 +20,6 @@ class ValidationFailure(models.Model):
     def __repr__(self):
         return self.method + " " + self.path
 
-    def get_request_formatted(self):
-        import cPickle
-        try:
-            return repr(cPickle.loads(base64.decodestring(self.request)))
-        except EOFError, UnpicklingError:
-            return None
-
     def get_response(self):
         import cPickle
         try:
@@ -98,35 +91,7 @@ class ValidationFailure(models.Model):
                 failure.path += '?' + qs
             failure.errors = errors
 
-            if isinstance(request, ModPythonRequest):
-                # prepopulate vars
-                request._get_get()
-                request._get_post()
-                request._get_cookies()
-                request._get_files()
-                request._get_meta()
-                request._get_request()
-                request._get_raw_post_data()
-                u = request.user
-                mp = request._req
-                del request._req # get rid of mp_request
-                try:
-                    req = copy.deepcopy(request)
-                except Exception, e:
-                    req = "Couldn't stash a copy of the request: %s" % str(e)
-                request._req = mp # restore mp_request
-            else:
-                try:
-                    req = copy.deepcopy(request)
-                    # remove the stuff we can't serialize
-                    del req.META['wsgi.errors']
-                    del req.META['wsgi.file_wrapper']
-                    del req.META['wsgi.input']
-                except Exception, e:
-                    # TODO - work out why this happens
-                    req = "Couldn't stash a copy of the request: %s" % str(e)
-
-            failure.request = base64.encodestring(cPickle.dumps(req))
+            failure.request = repr(request)
             failure.response = base64.encodestring(cPickle.dumps(response))
             failure.method = request.META['REQUEST_METHOD']
             failure.save()

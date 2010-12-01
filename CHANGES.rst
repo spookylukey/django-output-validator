@@ -11,6 +11,9 @@ Version 1.5 - 2010-12-01
   need, of course). Then go through the installation instructions in the README
   and update the name/values of the relevant settings.
 
+* Fixed stashing of request objects (now uses repr). This is BACKWARDS
+  INCOMPATIBLE with existing data (but we are using a new table anyway).
+
 
 Version 1.4 - 2008-04-28
 ------------------------
