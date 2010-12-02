@@ -1,19 +1,21 @@
-from django.conf.urls.defaults import *
+from django.conf.urls.defaults import patterns, url
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
+
 from output_validator.models import ValidationFailure
 
-info_dict = {
-    'queryset': ValidationFailure.objects.all(),
-}
-
-urlpatterns = patterns('',
-    (r'^$',
-        'django.views.generic.list_detail.object_list',
-        dict(info_dict, allow_empty=True)),
-    (r'^(?P<object_id>\d+)/$',
-        'django.views.generic.list_detail.object_detail',
-        info_dict),
-    (r'^(?P<object_id>\d+)/delete/$',
-        'output_validator.views.delete'),
-    (r'^delete/$',
-        'output_validator.views.bulkdelete'),
+urlpatterns = \
+    patterns('',
+             url(r'^$',
+                 ListView.as_view(queryset=ValidationFailure.objects.all()),
+                 name='output_validator.list'),
+             url(r'^(?P<pk>\d+)/$',
+                 DetailView.as_view(queryset=ValidationFailure.objects.all()),
+                 name='output_validator.detail'),
+             url(r'^(?P<object_id>\d+)/delete/$',
+                 'output_validator.views.delete',
+                 name='output_validator.delete'),
+             url(r'^delete/$',
+                 'output_validator.views.bulkdelete',
+                 name='output_validator.bulkdelete'),
 )
