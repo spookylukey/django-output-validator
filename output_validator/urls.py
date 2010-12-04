@@ -12,7 +12,7 @@ urlpatterns = \
              url(r'^(?P<pk>\d+)/$',
                  DetailView.as_view(queryset=ValidationFailure.objects.all()),
                  name='output_validator.detail'),
-             url(r'^(?P<object_id>\d+)/delete/$',
+             url(r'^(?P<pk>\d+)/delete/$',
                  'output_validator.views.delete',
                  name='output_validator.delete'),
              url(r'^delete/$',

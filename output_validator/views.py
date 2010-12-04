@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
 from output_validator.models import ValidationFailure
@@ -18,15 +19,15 @@ def bulkdelete(request):
                     except ValidationFailure.DoesNotExist:
                         pass
 
-    return HttpResponseRedirect("../")
+    return HttpResponseRedirect(reverse('output_validator.list'))
 
 
-def delete(request, object_id):
+def delete(request, pk):
     if request.POST:
         try:
-            vf = ValidationFailure.objects.get(id=object_id)
+            vf = ValidationFailure.objects.get(pk=pk)
             vf.delete()
         except ValidationFailure.DoesNotExist:
             pass
-    return HttpResponseRedirect("../../")
+    return HttpResponseRedirect(reverse('output_validator.list'))
 
