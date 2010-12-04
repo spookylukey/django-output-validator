@@ -1,8 +1,9 @@
 {% extends "output_validator/base.html" %}
+{% load url from future %}
 {% block content %}
 
 {% if object_list %}
-	<form method="post" action="delete/">{% csrf_token %}
+	<form method="post" action="{% url 'output_validator.bulkdelete' %}">{% csrf_token %}
 	<div class="errorsfound"><p>{{ object_list|length }} page(s) with errors</p></div>
 	<div>
 	<table>
@@ -16,7 +17,7 @@
 		<tr {% if forloop.counter|divisibleby:"2" %}class="alt"{% endif %}>
 			<td>{{ failure.timestamp|date:"d M Y h:i" }}</td>
 			<td><span class="method">{{ failure.method }}</span> <span class="path">{{ failure.path|escape }}</span></td>
-			<td><a href="{{ failure.id }}/">Details</a></td>
+			<td><a href="{% url 'output_validator.detail' object_id=failure.id %}">Details</a></td>
 			<td><input type="checkbox" name="deleteitem{{ failure.id }}" /></td>
 		</tr>
 		{% endfor %}
