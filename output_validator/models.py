@@ -92,7 +92,12 @@ class ValidationFailure(models.Model):
             failure.errors = errors
 
             failure.request = repr(request)
-            failure.response = base64.encodestring(cPickle.dumps(response))
+            try:
+                failure.response = base64.encodestring(cPickle.dumps(response))
+            except Exception:
+                # Just get the content
+                failure.response = base64.encodestring(cPickle.dumps({'content':response.content}))
+
             failure.method = request.META['REQUEST_METHOD']
             failure.save()
     do_validation = staticmethod(do_validation)
