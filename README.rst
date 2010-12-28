@@ -8,7 +8,8 @@ your Django project. This is meant to be used only in development.
 Installation
 ============
 
-* Run setup.py to install the package into your python path.
+* Run setup.py to install the package into your python path, or use
+  ``easy_install django-output-validator`` (or pip).
 
 * Add "output_validator" to your INSTALLED_APPS setting.
 
